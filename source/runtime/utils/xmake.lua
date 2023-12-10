@@ -4,8 +4,8 @@ target("utils")
     add_includedirs("public", {public = true})
     add_includedirs("private", {public = false})
     add_files(
-        "public/stl/*.mpp",
-        "public/utils/*.mpp")
+        "public/stl/*.cppm",
+        "public/utils/*.cppm")
 
     --add_deps("mimalloc-xmake")
 
