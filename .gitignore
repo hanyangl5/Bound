@@ -74,3 +74,4 @@ build
 # temp
 module
 vs2022
+script/__pycache__
