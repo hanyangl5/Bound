@@ -66,3 +66,10 @@ Examples_3
 Middleware_3
 Common_3/Resources
 Common_3/ThirdParty
+.xmake
+build
+.cache
+.vscode
+
+# temp
+module

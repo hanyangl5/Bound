@@ -1,0 +1,159 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="release|x64">
+      <Configuration>release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{16923C6D-22D9-4285-BB83-39256F11D177}</ProjectGuid>
+    <RootNamespace>utils</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.22621.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='release|x64'">
+    <OutDir>..\..\build\windows\x64\release\</OutDir>
+    <IntDir>..\..\build\.objs\utils\windows\x64\release\</IntDir>
+    <TargetName>utils</TargetName>
+    <TargetExt>.lib</TargetExt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='release|x64'" Label="Debugger">
+    <LocalDebuggerWorkingDirectory>..\..\build\windows\x64\release</LocalDebuggerWorkingDirectory>
+    <LocalDebuggerEnvironment>PATH=;$([System.Environment]::GetEnvironmentVariable('PATH'));%(LocalDebuggerEnvironment)</LocalDebuggerEnvironment>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='release|x64'">
+    <Lib>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Lib>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
+      <ExternalTemplatesDiagnostics>false</ExternalTemplatesDiagnostics>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DebugInformationFormat>None</DebugInformationFormat>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <MinimalRebuild>false</MinimalRebuild>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <PreBuildEvent>
+      <Message>
+      </Message>
+      <Command>setlocal
+echo [  0%]: compiling.module.release utils:types
+if %errorlevel% neq 0 goto :xmEnd
+if not exist "..\..\build\.objs\utils\windows\x64\release\source\runtime\utils\public\utils" mkdir "..\..\build\.objs\utils\windows\x64\release\source\runtime\utils\public\utils"
+if %errorlevel% neq 0 goto :xmEnd
+"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.exe" -nologo -std:c++20 -I..\..\source\runtime\utils\public -I..\..\source\runtime\utils\private /EHsc -TP -c ..\..\source\runtime\utils\public\utils\types.mpp -Fo..\..\build\.objs\utils\windows\x64\release\source\runtime\utils\public\utils\types.mpp.obj -ifcOutput ..\..\build\.gens\utils\windows\x64\release\rules\modules\cache\e7310597\utils-types.ifc -interface
+if %errorlevel% neq 0 goto :xmEnd
+echo [  0%]: compiling.module.release utils:time
+if %errorlevel% neq 0 goto :xmEnd
+if not exist "..\..\build\.objs\utils\windows\x64\release\source\runtime\utils\public\utils" mkdir "..\..\build\.objs\utils\windows\x64\release\source\runtime\utils\public\utils"
+if %errorlevel% neq 0 goto :xmEnd
+"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.exe" -nologo -std:c++20 -I..\..\source\runtime\utils\public -I..\..\source\runtime\utils\private /EHsc -TP -c ..\..\source\runtime\utils\public\utils\time.mpp -Fo..\..\build\.objs\utils\windows\x64\release\source\runtime\utils\public\utils\time.mpp.obj -ifcOutput ..\..\build\.gens\utils\windows\x64\release\rules\modules\cache\e7310597\utils-time.ifc -interface
+if %errorlevel% neq 0 goto :xmEnd
+echo [  0%]: compiling.module.release utils:task
+if %errorlevel% neq 0 goto :xmEnd
+if not exist "..\..\build\.objs\utils\windows\x64\release\source\runtime\utils\public\utils" mkdir "..\..\build\.objs\utils\windows\x64\release\source\runtime\utils\public\utils"
+if %errorlevel% neq 0 goto :xmEnd
+"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.exe" -nologo -std:c++20 -I..\..\source\runtime\utils\public -I..\..\source\runtime\utils\private /EHsc -TP -c ..\..\source\runtime\utils\public\utils\task.mpp -Fo..\..\build\.objs\utils\windows\x64\release\source\runtime\utils\public\utils\task.mpp.obj -ifcOutput ..\..\build\.gens\utils\windows\x64\release\rules\modules\cache\e7310597\utils-task.ifc -interface -reference utils:time=build\.gens\utils\windows\x64\release\rules\modules\cache\e7310597\utils-time.ifc
+if %errorlevel% neq 0 goto :xmEnd
+echo [  0%]: compiling.module.release utils:memory
+if %errorlevel% neq 0 goto :xmEnd
+if not exist "..\..\build\.objs\utils\windows\x64\release\source\runtime\utils\public\utils" mkdir "..\..\build\.objs\utils\windows\x64\release\source\runtime\utils\public\utils"
+if %errorlevel% neq 0 goto :xmEnd
+"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.exe" -nologo -std:c++20 -I..\..\source\runtime\utils\public -I..\..\source\runtime\utils\private /EHsc -TP -c ..\..\source\runtime\utils\public\utils\memory.mpp -Fo..\..\build\.objs\utils\windows\x64\release\source\runtime\utils\public\utils\memory.mpp.obj -ifcOutput ..\..\build\.gens\utils\windows\x64\release\rules\modules\cache\e7310597\utils-memory.ifc -interface -reference utils:types=build\.gens\utils\windows\x64\release\rules\modules\cache\e7310597\utils-types.ifc
+if %errorlevel% neq 0 goto :xmEnd
+echo [  0%]: compiling.module.release utils:log
+if %errorlevel% neq 0 goto :xmEnd
+if not exist "..\..\build\.objs\utils\windows\x64\release\source\runtime\utils\public\utils" mkdir "..\..\build\.objs\utils\windows\x64\release\source\runtime\utils\public\utils"
+if %errorlevel% neq 0 goto :xmEnd
+"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.exe" -nologo -std:c++20 -I..\..\source\runtime\utils\public -I..\..\source\runtime\utils\private /EHsc -TP -c ..\..\source\runtime\utils\public\utils\log.mpp -Fo..\..\build\.objs\utils\windows\x64\release\source\runtime\utils\public\utils\log.mpp.obj -ifcOutput ..\..\build\.gens\utils\windows\x64\release\rules\modules\cache\e7310597\utils-log.ifc -interface
+if %errorlevel% neq 0 goto :xmEnd
+echo [  0%]: compiling.module.release utils:filesystem
+if %errorlevel% neq 0 goto :xmEnd
+if not exist "..\..\build\.objs\utils\windows\x64\release\source\runtime\utils\public\utils" mkdir "..\..\build\.objs\utils\windows\x64\release\source\runtime\utils\public\utils"
+if %errorlevel% neq 0 goto :xmEnd
+"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.exe" -nologo -std:c++20 -I..\..\source\runtime\utils\public -I..\..\source\runtime\utils\private /EHsc -TP -c ..\..\source\runtime\utils\public\utils\filesystem.mpp -Fo..\..\build\.objs\utils\windows\x64\release\source\runtime\utils\public\utils\filesystem.mpp.obj -ifcOutput ..\..\build\.gens\utils\windows\x64\release\rules\modules\cache\e7310597\utils-filesystem.ifc -interface
+if %errorlevel% neq 0 goto :xmEnd
+echo [  0%]: compiling.module.release utils
+if %errorlevel% neq 0 goto :xmEnd
+if not exist "..\..\build\.objs\utils\windows\x64\release\source\runtime\utils\public\utils" mkdir "..\..\build\.objs\utils\windows\x64\release\source\runtime\utils\public\utils"
+if %errorlevel% neq 0 goto :xmEnd
+"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.exe" -nologo -std:c++20 -I..\..\source\runtime\utils\public -I..\..\source\runtime\utils\private /EHsc -TP -c ..\..\source\runtime\utils\public\utils\utils.mpp -Fo..\..\build\.objs\utils\windows\x64\release\source\runtime\utils\public\utils\utils.mpp.obj -ifcOutput ..\..\build\.gens\utils\windows\x64\release\rules\modules\cache\e7310597\utils.ifc -interface -reference utils:filesystem=build\.gens\utils\windows\x64\release\rules\modules\cache\e7310597\utils-filesystem.ifc -reference utils:log=build\.gens\utils\windows\x64\release\rules\modules\cache\e7310597\utils-log.ifc -reference utils:memory=build\.gens\utils\windows\x64\release\rules\modules\cache\e7310597\utils-memory.ifc -reference utils:types=build\.gens\utils\windows\x64\release\rules\modules\cache\e7310597\utils-types.ifc -reference utils:task=build\.gens\utils\windows\x64\release\rules\modules\cache\e7310597\utils-task.ifc -reference utils:time=build\.gens\utils\windows\x64\release\rules\modules\cache\e7310597\utils-time.ifc
+if %errorlevel% neq 0 goto :xmEnd
+echo [  0%]: compiling.module.release bdstl:vector
+if %errorlevel% neq 0 goto :xmEnd
+if not exist "..\..\build\.objs\utils\windows\x64\release\source\runtime\utils\public\stl" mkdir "..\..\build\.objs\utils\windows\x64\release\source\runtime\utils\public\stl"
+if %errorlevel% neq 0 goto :xmEnd
+"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.exe" -nologo -std:c++20 -I..\..\source\runtime\utils\public -I..\..\source\runtime\utils\private /EHsc -TP -c ..\..\source\runtime\utils\public\stl\vector.mpp -Fo..\..\build\.objs\utils\windows\x64\release\source\runtime\utils\public\stl\vector.mpp.obj -ifcOutput ..\..\build\.gens\utils\windows\x64\release\rules\modules\cache\000b6290\bdstl-vector.ifc -interface
+if %errorlevel% neq 0 goto :xmEnd
+echo [  0%]: compiling.module.release bdstl:string
+if %errorlevel% neq 0 goto :xmEnd
+if not exist "..\..\build\.objs\utils\windows\x64\release\source\runtime\utils\public\stl" mkdir "..\..\build\.objs\utils\windows\x64\release\source\runtime\utils\public\stl"
+if %errorlevel% neq 0 goto :xmEnd
+"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.exe" -nologo -std:c++20 -I..\..\source\runtime\utils\public -I..\..\source\runtime\utils\private /EHsc -TP -c ..\..\source\runtime\utils\public\stl\string.mpp -Fo..\..\build\.objs\utils\windows\x64\release\source\runtime\utils\public\stl\string.mpp.obj -ifcOutput ..\..\build\.gens\utils\windows\x64\release\rules\modules\cache\000b6290\bdstl-string.ifc -interface
+if %errorlevel% neq 0 goto :xmEnd
+echo [  0%]: compiling.module.release bdstl:set
+if %errorlevel% neq 0 goto :xmEnd
+if not exist "..\..\build\.objs\utils\windows\x64\release\source\runtime\utils\public\stl" mkdir "..\..\build\.objs\utils\windows\x64\release\source\runtime\utils\public\stl"
+if %errorlevel% neq 0 goto :xmEnd
+"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.exe" -nologo -std:c++20 -I..\..\source\runtime\utils\public -I..\..\source\runtime\utils\private /EHsc -TP -c ..\..\source\runtime\utils\public\stl\set.mpp -Fo..\..\build\.objs\utils\windows\x64\release\source\runtime\utils\public\stl\set.mpp.obj -ifcOutput ..\..\build\.gens\utils\windows\x64\release\rules\modules\cache\000b6290\bdstl-set.ifc -interface
+if %errorlevel% neq 0 goto :xmEnd
+echo [  0%]: compiling.module.release bdstl:map
+if %errorlevel% neq 0 goto :xmEnd
+if not exist "..\..\build\.objs\utils\windows\x64\release\source\runtime\utils\public\stl" mkdir "..\..\build\.objs\utils\windows\x64\release\source\runtime\utils\public\stl"
+if %errorlevel% neq 0 goto :xmEnd
+"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.exe" -nologo -std:c++20 -I..\..\source\runtime\utils\public -I..\..\source\runtime\utils\private /EHsc -TP -c ..\..\source\runtime\utils\public\stl\map.mpp -Fo..\..\build\.objs\utils\windows\x64\release\source\runtime\utils\public\stl\map.mpp.obj -ifcOutput ..\..\build\.gens\utils\windows\x64\release\rules\modules\cache\000b6290\bdstl-map.ifc -interface
+if %errorlevel% neq 0 goto :xmEnd
+echo [  0%]: compiling.module.release bdstl:array
+if %errorlevel% neq 0 goto :xmEnd
+if not exist "..\..\build\.objs\utils\windows\x64\release\source\runtime\utils\public\stl" mkdir "..\..\build\.objs\utils\windows\x64\release\source\runtime\utils\public\stl"
+if %errorlevel% neq 0 goto :xmEnd
+"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.exe" -nologo -std:c++20 -I..\..\source\runtime\utils\public -I..\..\source\runtime\utils\private /EHsc -TP -c ..\..\source\runtime\utils\public\stl\array.mpp -Fo..\..\build\.objs\utils\windows\x64\release\source\runtime\utils\public\stl\array.mpp.obj -ifcOutput ..\..\build\.gens\utils\windows\x64\release\rules\modules\cache\000b6290\bdstl-array.ifc -interface
+if %errorlevel% neq 0 goto :xmEnd
+echo [  0%]: compiling.module.release bdstl:algorithm
+if %errorlevel% neq 0 goto :xmEnd
+if not exist "..\..\build\.objs\utils\windows\x64\release\source\runtime\utils\public\stl" mkdir "..\..\build\.objs\utils\windows\x64\release\source\runtime\utils\public\stl"
+if %errorlevel% neq 0 goto :xmEnd
+"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.exe" -nologo -std:c++20 -I..\..\source\runtime\utils\public -I..\..\source\runtime\utils\private /EHsc -TP -c ..\..\source\runtime\utils\public\stl\algorithm.mpp -Fo..\..\build\.objs\utils\windows\x64\release\source\runtime\utils\public\stl\algorithm.mpp.obj -ifcOutput ..\..\build\.gens\utils\windows\x64\release\rules\modules\cache\000b6290\bdstl-algorithm.ifc -interface
+if %errorlevel% neq 0 goto :xmEnd
+echo [  0%]: compiling.module.release bdstl
+if %errorlevel% neq 0 goto :xmEnd
+if not exist "..\..\build\.objs\utils\windows\x64\release\source\runtime\utils\public\stl" mkdir "..\..\build\.objs\utils\windows\x64\release\source\runtime\utils\public\stl"
+if %errorlevel% neq 0 goto :xmEnd
+"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.exe" -nologo -std:c++20 -I..\..\source\runtime\utils\public -I..\..\source\runtime\utils\private /EHsc -TP -c ..\..\source\runtime\utils\public\stl\stl.mpp -Fo..\..\build\.objs\utils\windows\x64\release\source\runtime\utils\public\stl\stl.mpp.obj -ifcOutput ..\..\build\.gens\utils\windows\x64\release\rules\modules\cache\000b6290\bdstl.ifc -interface -reference bdstl:algorithm=build\.gens\utils\windows\x64\release\rules\modules\cache\000b6290\bdstl-algorithm.ifc -reference bdstl:array=build\.gens\utils\windows\x64\release\rules\modules\cache\000b6290\bdstl-array.ifc -reference bdstl:map=build\.gens\utils\windows\x64\release\rules\modules\cache\000b6290\bdstl-map.ifc -reference bdstl:set=build\.gens\utils\windows\x64\release\rules\modules\cache\000b6290\bdstl-set.ifc -reference bdstl:string=build\.gens\utils\windows\x64\release\rules\modules\cache\000b6290\bdstl-string.ifc -reference bdstl:vector=build\.gens\utils\windows\x64\release\rules\modules\cache\000b6290\bdstl-vector.ifc
+if %errorlevel% neq 0 goto :xmEnd
+:xmEnd
+endlocal &amp; call :xmErrorLevel %errorlevel% &amp; goto :xmDone
+:xmErrorLevel
+exit /b %1
+:xmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

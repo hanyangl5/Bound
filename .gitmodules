@@ -1,0 +1,3 @@
+[submodule "source/third_party/mimalloc-xmake"]
+	path = source/third_party/mimalloc-xmake
+	url = https://github.com/hyl5-org/mimalloc-xmake.git
