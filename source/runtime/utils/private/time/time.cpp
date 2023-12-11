@@ -1,3 +1,3 @@
-module utils:time;
+module time;
 
 namespace bd {} // namespace bd

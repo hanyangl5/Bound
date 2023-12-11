@@ -1,7 +1,7 @@
 module;
 
 #include <string>
-export module bdstl:string;
+export module string;
 
 export namespace bd {
     namespace stl {

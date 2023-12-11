@@ -1,3 +1,3 @@
-module utils:task;
+module task;
 
 namespace bd {} // namespace bd

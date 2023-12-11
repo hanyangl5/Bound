@@ -3,7 +3,7 @@ module;
 // TODO(hyl5): add https://github.com/HowardHinnant/date
 #include <chrono>
 
-export module utils:time;
+export module time;
 
 export namespace bd {
 namespace time {

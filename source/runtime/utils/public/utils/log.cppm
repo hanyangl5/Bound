@@ -1,6 +1,6 @@
 module;
 
-export module utils:log;
+export module log;
 
 // #define REGISTOR_LOG_CATEGORY(name)
 

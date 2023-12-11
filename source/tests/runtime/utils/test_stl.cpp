@@ -1,7 +1,11 @@
 #include <cstdio>
 
-import utils;
-import bdstl;
+import types;
+import vector;
+import array;
+import set;
+import string;
+import map;
 
 auto test_array = []() {
     std::printf("array test\n");

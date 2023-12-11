@@ -1,12 +1,10 @@
 module;
-
 #include <filesystem>
-
-export module utils:filesystem;
+export module filesystem;
 
 export namespace bd {
-namespace filesystem {
-// cannot track by pmr
+namespace fs {
 using path = std::filesystem::path;
+void create_directory(const path& p);
 }
 } // namespace bd

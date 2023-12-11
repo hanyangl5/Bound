@@ -1,6 +1,10 @@
 #include <cstdio>
 
-import utils;
+import time;
+import filesystem;
+import types;
+import task;
+import log;
 
 auto test_memory = []() {
     // TODO(hyl5):
@@ -29,7 +33,7 @@ auto test_task = []() {
 };
 
 auto test_filesystem = []() {
-    bd::filesystem::path p("test_path.txt");
+    bd::fs::path p("test_path.txt");
     std::printf("path is %s", p.string().c_str());
 };
 

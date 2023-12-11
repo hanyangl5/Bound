@@ -1,7 +1,7 @@
 module;
 
 #include <array>
-export module bdstl:array;
+export module array;
 
 export namespace bd {
 namespace stl {

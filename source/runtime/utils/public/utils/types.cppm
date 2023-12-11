@@ -2,7 +2,7 @@ module;
 
 #include <cstdint>
 
-export module utils:types;
+export module types;
 
 export namespace bd {
 using uint8 = uint8_t;

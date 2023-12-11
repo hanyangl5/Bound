@@ -1,7 +1,7 @@
 module;
 
 #include <vector>
-export module bdstl:vector;
+export module vector;
 
 export namespace bd {
     namespace stl {

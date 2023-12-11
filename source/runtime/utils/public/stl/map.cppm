@@ -1,7 +1,7 @@
 module;
 #include <map>
 #include <unordered_map>
-export module bdstl:map;
+export module map;
 
 export namespace bd {
     namespace stl {

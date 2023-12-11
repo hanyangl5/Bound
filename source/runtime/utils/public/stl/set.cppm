@@ -1,7 +1,7 @@
 module;
 #include <set>
 #include <unordered_set>
-export module bdstl:set;
+export module set;
 
 export namespace bd {
     namespace stl {

@@ -1,3 +1,6 @@
 [submodule "source/third_party/mimalloc-xmake"]
 	path = source/third_party/mimalloc-xmake
 	url = https://github.com/hyl5-org/mimalloc-xmake.git
+[submodule "source/third_party/glfw-xmake"]
+	path = source/third_party/glfw-xmake
+	url = https://github.com/hyl5-org/glfw-xmake.git

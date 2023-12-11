@@ -1,3 +1,3 @@
-module utils:log;
+module log;
 
 namespace bd {} // namespace bd

@@ -4,11 +4,10 @@
 //       header (which should be in rare cases, and usually only in core Forge source),
 //       define "IMEMORY_FROM_HEADER" before including it.
 //--------------------------------------------------------------------------------------------
-module;
 
-export module utils:memory;
+export module memory;
 
-import :types;
+import types;
 
 export namespace bd {
 

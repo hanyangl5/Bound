@@ -2,7 +2,7 @@ module;
 
 #include <thread>
 
-export module utils:task;
+export module task;
 
 //import :time;
 

@@ -2,7 +2,7 @@ module;
 
 #include <algorithm>
 
-export module bdstl:algorithm;
+export module algorithm;
 
 namespace bd {
 namespace stl {} // namespace stl
