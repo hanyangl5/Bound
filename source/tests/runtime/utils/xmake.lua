@@ -9,4 +9,3 @@ target("test_stl")
     set_languages("cxx20")
     add_files("test_stl.cpp")
     add_deps("utils")
-
