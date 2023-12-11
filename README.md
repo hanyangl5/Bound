@@ -4,7 +4,7 @@ WIP
 
 # build
 
-- c++20 compatible compiler
+- c++20 compatible compiler(only support vs2022 for now)
 - xmake
 - python3
 
