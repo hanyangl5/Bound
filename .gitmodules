@@ -10,3 +10,18 @@
 [submodule "source/third_party/imgui-bound"]
 	path = source/third_party/imgui-bound
 	url = https://github.com/hyl5-org/imgui-bound.git
+[submodule "source/third_party/tracy"]
+	path = source/third_party/tracy
+	url = https://github.com/hyl5-org/tracy.git
+[submodule "source/third_party/magic_enum"]
+	path = source/third_party/magic_enum
+	url = https://github.com/hyl5-org/magic_enum.git
+[submodule "source/third_party/pybind11"]
+	path = source/third_party/pybind11
+	url = https://github.com/hyl5-org/pybind11.git
+[submodule "source/third_party/JoltPhysics"]
+	path = source/third_party/JoltPhysics
+	url = https://github.com/hyl5-org/JoltPhysics.git
+[submodule "source/third_party/flecs"]
+	path = source/third_party/flecs
+	url = https://github.com/hyl5-org/flecs.git
