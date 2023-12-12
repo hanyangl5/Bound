@@ -75,3 +75,4 @@ build
 module
 vs2022
 script/__pycache__
+vsxmake*

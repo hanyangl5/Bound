@@ -1,7 +1,7 @@
 export module platform;
 
 import types;
-
+import task;
 export namespace bd {
 
 enum class window_mode : uint8 { wm_windowed, wm_fullscreen, wm_borderless };
@@ -131,6 +131,6 @@ void getDpiScale(float32 array[2]);
 
 bool getResolutionSupport(const monitor_desc &monitor, const resoluion &res);
 
-extern bd::uint32 max_thread_count;
+bd::uint32 max_thread_count = bd::thread::hardware_concurrency();
 
 } // namespace bd

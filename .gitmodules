@@ -4,3 +4,9 @@
 [submodule "source/third_party/glfw-xmake"]
 	path = source/third_party/glfw-xmake
 	url = https://github.com/hyl5-org/glfw-xmake.git
+[submodule "source/third_party/spdlog-xmake"]
+	path = source/third_party/spdlog-xmake
+	url = https://github.com/hyl5-org/spdlog-xmake.git
+[submodule "source/third_party/imgui-bound"]
+	path = source/third_party/imgui-bound
+	url = https://github.com/hyl5-org/imgui-bound.git

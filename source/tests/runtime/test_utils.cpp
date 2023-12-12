@@ -1,5 +1,5 @@
 #include <cstdio>
-
+//#include "doctest.h"
 import time;
 import filesystem;
 import types;
@@ -40,10 +40,11 @@ auto test_filesystem = []() {
 auto test_log = []() {
 
 };
-int main() {
-    test_types();
-    test_time();
-    test_task();
-    test_filesystem();
-    test_time();
+
+TEST_CASE("test utils") {
+    test_array();
+    test_vector();
+    test_set();
+    test_map();
+    test_str();
 }

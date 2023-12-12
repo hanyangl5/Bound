@@ -1,3 +1,4 @@
+#include "doctest.h"
 #include <cstdio>
 
 import types;
@@ -12,6 +13,7 @@ auto test_array = []() {
     bd::stl::array<bd::int32, 5> arr{1, 2, 3, 4, 5};
     for (auto &i : arr) {
         std::printf("%d\n", i);
+        //EXPECT_TRUE
     }
 };
 
@@ -50,10 +52,11 @@ auto test_str = []() {
     bd::stl::str str = "12345";
     std::printf("%s\n", str.c_str());
 };
-int main() {
-    test_array();
-    test_vector();
-    test_set();
-    test_map();
-    test_str();
+
+TEST_CASE("test stl") {
+       test_array();
+       test_vector();
+       test_set();
+       test_map();
+       test_str();
 }
