@@ -1,8 +1,8 @@
 set_project("BoundEngine")
 
-bound_project_dir = "./"
-bound_source_dir = bound_project_dir .. "source/"
-bound_third_party_dir = bound_source_dir .. "third_party/"
+bound_project_dir = os.curdir()
+bound_source_dir = path.join(bound_project_dir, "source")
+bound_third_party_dir = path.join(bound_source_dir, "third_party")
 includes("source/xmake.lua")
 
 

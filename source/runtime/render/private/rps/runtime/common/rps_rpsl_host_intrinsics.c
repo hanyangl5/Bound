@@ -216,8 +216,8 @@ enum DXILOpCode
 
     // Dot product with accumulate
     Dot2AddHalf     = 162,  // 2D half dot product with accumulate to float
-    Dot4AddI8Packed = 163,  // signed dot product of 4 x i8 vectors packed into i32, with accumulate to i32
-    Dot4AddU8Packed = 164,  // unsigned dot product of 4 x u8 vectors packed into i32, with accumulate to i32
+    Dot4AddI8Packed = 163,  // signed dot product of 4 x i8 vectors packed into int32, with accumulate to int32
+    Dot4AddU8Packed = 164,  // unsigned dot product of 4 x uint8 vectors packed into int32, with accumulate to int32
 
     // Dot
     Dot2 = 54,  // Two-dimensional vector dot-product

@@ -9,4 +9,5 @@ target("utils")
         "public/**.cppm")
 
     add_deps("mimalloc-xmake")
+    add_deps("spdlog-xmake")
 

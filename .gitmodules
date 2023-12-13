@@ -25,3 +25,9 @@
 [submodule "source/third_party/flecs"]
 	path = source/third_party/flecs
 	url = https://github.com/hyl5-org/flecs.git
+[submodule "source/third_party/VulkanMemoryAllocator"]
+	path = source/third_party/VulkanMemoryAllocator
+	url = https://github.com/hyl5-org/VulkanMemoryAllocator
+[submodule "source/third_party/D3D12MemoryAllocator"]
+	path = source/third_party/D3D12MemoryAllocator
+	url = https://github.com/hyl5-org/D3D12MemoryAllocator.git
