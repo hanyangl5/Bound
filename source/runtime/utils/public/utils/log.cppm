@@ -2,7 +2,7 @@ module;
 
 #include <memory>
 #include <spdlog/spdlog.h>
-
+#include <spdlog/sinks/stdout_color_sinks.h>
 #include "singleton.h"
 export module log;
 
@@ -23,7 +23,7 @@ namespace bd {
 
 class Log : public singleton<Log> {
   public:
-    enum class loglevel : u8 { debug, info, warn, error, fatal };
+    enum class loglevel : uint8 { debug, info, warn, error, fatal };
 
     Log() noexcept;
     ~Log() noexcept override;

@@ -451,7 +451,7 @@ struct compiled_shader_group {
     pipeline_reflection *m_pipeline_reflection = nullptr;
 };
 
-class shader_compiler : public Singleton<shader_compiler> {
+class shader_compiler : public singleton<shader_compiler> {
   public:
     shader_compiler() noexcept;
     ~shader_compiler() noexcept override;

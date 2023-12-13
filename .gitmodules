@@ -31,3 +31,6 @@
 [submodule "source/third_party/D3D12MemoryAllocator"]
 	path = source/third_party/D3D12MemoryAllocator
 	url = https://github.com/hyl5-org/D3D12MemoryAllocator.git
+[submodule "source/third_party/antumbralibs"]
+	path = source/third_party/antumbralibs
+	url = https://github.com/hanyangl5/antumbralibs.git
