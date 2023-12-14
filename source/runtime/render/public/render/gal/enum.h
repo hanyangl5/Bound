@@ -26,15 +26,22 @@
 
 #pragma once
 
+import blob;
+import types;
+import types;
+import array;
+import set;
+import string;
+import map;
 
 #include <variant>
 #ifdef _WIN32
 #include <Windows.h>
 #endif
 #include "format.h"
-import blob;
 
-import types;
+
+
 // namespace bd {
 // struct ante_window;
 // }
@@ -401,7 +408,7 @@ struct gal_depth_state_desc {
 struct gal_rasterizer_state_desc {
     gal_cull_mode mCullMode;
     int32_t mDepthBias;
-    f32 mSlopeScaledDepthBias;
+    float32 mSlopeScaledDepthBias;
     gal_polygon_fill_mode mFillMode;
     gal_front_face mFrontFace;
     bool mMultiSample;
@@ -412,7 +419,7 @@ struct gal_rasterizer_state_desc {
 struct gal_vertex_attrib {
     ShaderSemantic mSemantic;
     uint32 mSemanticNameLength;
-    bd::array<char, MAX_SEMANTIC_NAME_LENGTH> mSemanticName;
+    bd::stl::array<char, MAX_SEMANTIC_NAME_LENGTH> mSemanticName;
     gal_texture_format mFormat;
     uint32 mBinding;
     uint32 mLocation;
@@ -422,8 +429,8 @@ struct gal_vertex_attrib {
 
 struct gal_vertex_layout {
     uint32 mAttribCount;
-    bd::array<gal_vertex_attrib, MAX_VERTEX_ATTRIBS> mAttribs;
-    bd::array<uint32, MAX_VERTEX_BINDINGS> mStrides;
+    bd::stl::array<gal_vertex_attrib, MAX_VERTEX_ATTRIBS> mAttribs;
+    bd::stl::array<uint32, MAX_VERTEX_BINDINGS> mStrides;
 };
 
 struct gal_read_range {
@@ -433,13 +440,13 @@ struct gal_read_range {
 
 struct gal_clear_value {
     struct rgb {
-        f32 r;
-        f32 g;
-        f32 b;
-        f32 a;
+        float32 r;
+        float32 g;
+        float32 b;
+        float32 a;
     };
     struct ds {
-        f32 depth;
+        float32 depth;
         uint32 stencil;
     };
     std::variant<std::monostate, rgb, ds> value;
@@ -525,11 +532,11 @@ struct gal_sampler_desc {
     gal_sampler_address_mode address_mode_v;
     gal_sampler_address_mode address_mode_w;
     gal_compare_mode compare_mode;
-    f32 mip_lod_bias;
-    f32 min_lod;
-    f32 max_lod;
-    f32 max_anisotropy;
-    bd::array<f32, 4> border_color;
+    float32 mip_lod_bias;
+    float32 min_lod;
+    float32 max_lod;
+    float32 max_anisotropy;
+    bd::stl::array<float32, 4> border_color;
 };
 DECLARE_GAL_HANDLE(gal_sampler) {
   public:
@@ -567,7 +574,7 @@ struct gal_swap_chain_desc {
 
 DECLARE_GAL_HANDLE(gal_swap_chain) {
     gal_swap_chain_desc m_desc;
-    bd::array<gal_render_target, MAX_SWAPCHAIN_IMAGES> m_render_targets;
+    bd::stl::array<gal_render_target, MAX_SWAPCHAIN_IMAGES> m_render_targets;
 };
 
 //struct gal_shader_desc {

@@ -17,8 +17,8 @@
 #include <vk_mem_alloc.h>
 
 
-#include "../enum.h"
-#include "../gal.h"
+#include "render/gal/enum.h"
+#include "render/gal/gal.h"
 
 
 namespace bd::gal {
@@ -41,8 +41,8 @@ DECLARE_VK_HANDLE(context) {
     //vk_queue graphics_queue;
     //vk_queue compute_queue;
     //vk_queue transfer_queue;
-    bd::array<vk_queue, 3> queues;
-    f32 default_queue_property = 0.0f;
+    bd::stl::array<vk_queue, 3> queues;
+    float32 default_queue_property = 0.0f;
 };
 
 DECLARE_VK_HANDLE(buffer) {
@@ -100,13 +100,13 @@ DECLARE_VK_HANDLE(semaphore) {
     bool b_signaled;
 };
 DECLARE_VK_HANDLE(swap_chain) {
-    bd::array<gal_render_target, MAX_SWAPCHAIN_IMAGES> &get_render_targets() { return m_render_targets; }
+    bd::stl::array<gal_render_target, MAX_SWAPCHAIN_IMAGES> &get_render_targets() { return m_render_targets; }
     uint32 image_index;
     VkSwapchainKHR m_swap_chain = VK_NULL_HANDLE;
     VkSurfaceKHR m_surface = VK_NULL_HANDLE;
     VkSurfaceFormatKHR optimal_surface_format{};
-    bd::array<VkImage, MAX_SWAPCHAIN_IMAGES> swap_chain_images{};
-    bd::array<VkImageView, MAX_SWAPCHAIN_IMAGES> swap_chain_image_views{};
+    bd::stl::array<VkImage, MAX_SWAPCHAIN_IMAGES> swap_chain_images{};
+    bd::stl::array<VkImageView, MAX_SWAPCHAIN_IMAGES> swap_chain_image_views{};
 };
 
 DECLARE_VK_HANDLE(command_pool) { VkCommandPool m_cmd_pool; };
@@ -118,23 +118,23 @@ DECLARE_VK_HANDLE(command_list) {
 };
 
 DECLARE_VK_HANDLE(shader_program) {
-    bd::array<VkShaderModule, gal_shader_stage_count> m_shader_modules;
-    bd::array<const char *, gal_shader_stage_count> m_entrys;
+    bd::stl::array<VkShaderModule, gal_shader_stage_count> m_shader_modules;
+    bd::stl::array<const char *, gal_shader_stage_count> m_entrys;
     VkSpecializationInfo *m_specialization_info;
 };
 
 DECLARE_VK_HANDLE(root_signature) {
     VkPipelineLayout pipeline_layout;
-    bd::array<VkDescriptorSetLayout, MAX_DESCRIPTOR_SET_COUNT> set_layouts;
-    bd::array<VkDescriptorUpdateTemplate, MAX_DESCRIPTOR_SET_COUNT> descriptor_set_update_template;
+    bd::stl::array<VkDescriptorSetLayout, MAX_DESCRIPTOR_SET_COUNT> set_layouts;
+    bd::stl::array<VkDescriptorUpdateTemplate, MAX_DESCRIPTOR_SET_COUNT> descriptor_set_update_template;
 
     struct vk_pool_size_desc {
         VkDescriptorPoolSize *pool_sizes;
         uint32 pool_size_count;
     };
 
-    bd::array<vk_pool_size_desc, MAX_DESCRIPTOR_SET_COUNT> descriptor_pool_size;                      // an unordered_map
-    bd::hash_map<bd::str, uint32> resource_map; // 3bit set index(0-8), 6 bit binding index(0-64), 6 bit binding order(0-64), 17 bit empty
+    bd::stl::array<vk_pool_size_desc, MAX_DESCRIPTOR_SET_COUNT> descriptor_pool_size;                      // an unordered_map
+    bd::stl::hash_map<bd::stl::str, uint32> resource_map; // 3bit set index(0-8), 6 bit binding index(0-64), 6 bit binding order(0-64), 17 bit empty
     // FIXME(hyl5): resource_map is not controlled by pmr
 };
 

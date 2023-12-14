@@ -4,6 +4,19 @@ module;
 #include <spdlog/spdlog.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include "singleton.h"
+
+#define DECLARE_LOG_CATEGORY ;
+
+#define LOG_DEBUG(...) bd::Log::get().debug(__VA_ARGS__);
+
+#define LOG_INFO(...) bd::Log::get().info(__VA_ARGS__);
+
+#define LOG_WARN(...) bd::Log::get().warn(__VA_ARGS__);
+
+#define LOG_ERROR(...) bd::Log::get().error(__VA_ARGS__);
+
+#define LOG_FATAL(...) bd::Log::get().fatal(__VA_ARGS__);
+
 export module log;
 
 // #define REGISTOR_LOG_CATEGORY(name)
@@ -65,20 +78,10 @@ Log::~Log() noexcept {
     spdlog::drop_all();
 }
 
-#define DECLARE_LOG_CATEGORY ;
-
-#define LOG_DEBUG(...) bd::Log::get().debug(__VA_ARGS__);
-
-#define LOG_INFO(...) bd::Log::get().info(__VA_ARGS__);
-
-#define LOG_WARN(...) bd::Log::get().warn(__VA_ARGS__);
-
-#define LOG_ERROR(...) bd::Log::get().error(__VA_ARGS__);
-
-#define LOG_FATAL(...) bd::Log::get().fatal(__VA_ARGS__);
 
 //#define CHECK_VK_RESULT(res) bd::Log::get().CheckVulkanResult(res, __FUNCTION__, __LINE__);
 //
 //#define CHECK_DX_RESULT(res) bd::Log::get().CheckDXResult(res, __FUNCTION__, __LINE__);
+
 
 } // namespace bd

@@ -26,24 +26,13 @@
 
 #pragma once
 
-#include "../gal.h"
+#include "render/gal/gal.h"
 #include "gal_vulkan_enum.h"
 
 namespace bd::gal {
 
 // TODO(hyl5): static or inline?
 
-inline void load_gal_vk_functions() {
-#define VK_LOAD_FUNCTION_PTRS
-#include "../helper/helper_macro.h"
-#undef VK_LOAD_FUNCTION_PTRS
-}
-
-inline void offload_gal_vk_functions() {
-#define VK_OFFLOAD_FUNCTION_PTRS
-#include "../helper/helper_macro.h"
-#undef VK_OFFLOAD_FUNCTION_PTRS
-}
 
 constexpr VkDescriptorType utils_to_vk_descriptor_type(gal_descriptor_type type) {
     switch (type) {

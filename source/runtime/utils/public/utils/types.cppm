@@ -17,4 +17,13 @@ using int64 = int64_t;
 
 using float32 = float;
 using float64 = double;
+
+template <typename T> T _min(const T &lhs, const T &rhs) { return lhs < rhs ? lhs : rhs; }
+
+template <typename T> T _max(const T &lhs, const T &rhs) { return lhs > rhs ? lhs : rhs; }
+
+template <typename T> T constexpr _lerp(const T &lhs, const T &rhs, float32 t) { return lhs + t * (rhs - lhs); }
+
+template <typename T> T constexpr AlignUp(const T &lhs, const T &rhs) { return (lhs + T(rhs - 1)) / rhs; }
+
 } // namespace bd

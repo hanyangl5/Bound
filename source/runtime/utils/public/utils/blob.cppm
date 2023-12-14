@@ -1,4 +1,3 @@
-module;
 import types;
 
 export module blob;

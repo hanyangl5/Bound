@@ -4,17 +4,39 @@
 //       header (which should be in rare cases, and usually only in core Forge source),
 //       define "IMEMORY_FROM_HEADER" before including it.
 //--------------------------------------------------------------------------------------------
+module;
+#include <mimalloc.h>
 
 export module memory;
-
 import types;
+
 
 export namespace bd {
 
 constexpr uint64 BD_KB = 1024ull;
 constexpr uint64 BD_MB = 1024ull * BD_KB;
 constexpr uint64 BD_GB = 1024ull * BD_KB;
+namespace memory {
 
+void *amalloc(uint64 size) { return mi_malloc(size); }
+
+void *aaligned_alloc(uint64 alignment, uint64 size) { return mi_aligned_alloc(alignment, size); }
+template <typename T = void, typename... Args> T *alloc(Args &&...args) {
+    void *memory = nullptr;
+    memory = mi_malloc(sizeof(T));
+    return new (memory) T(std::forward<Args>(args)...);
+}
+
+template <typename T> void afree(T *ptr) {
+    if (!ptr) {
+        return;
+    }
+    if constexpr (!std::is_scalar<T>::value && !std::is_same<T, void>::value) {
+        ptr->~T();
+    }
+    free(ptr);
+}
+} // namespace memory
 // void *bd_malloc_internal(size_t size, const char *f, int l, const char *sf);
 // void *bd_memalign_internal(size_t align, size_t size, const char *f, int l, const char *sf);
 // void *bd_calloc_internal(size_t count, size_t size, const char *f, int l, const char *sf);

@@ -16,13 +16,14 @@
 #endif
 #include <dxcompiler/dxcapi.h>
 // project headers
-#include "framework/gal/enum.h"
-#include "framework/utils/memory/container.h"
-#include "framework/utils/singleton/public_singleton.h"
+#include "render/gal/enum.h"
+#include "utils/singleton.h"
+
+#include "utils/cxx_helper.h"
+
 import types;
 import blob;
 
-#include "framework/utils/helper.h"
 // enums
 // antumbra shader compiler
 namespace bd::gal {
@@ -245,7 +246,7 @@ struct shader_compile_desc {
     bd::vector<std::filesystem::path> defines;
 };
 
-//inline constexpr bd::array<char, 4> hsb_header{'h', 's', 'b', '1'};
+//inline constexpr bd::stl::array<char, 4> hsb_header{'h', 's', 'b', '1'};
 
 //struct ShaderBinaryHeader {
 //    fixed_array<char, 4> header;
@@ -338,7 +339,7 @@ struct shader_reflection {
     uint32 mVariableCount;
 
     // Thread group size for compute shader
-    bd::array<uint32, 3> work_group_size;
+    bd::stl::array<uint32, 3> work_group_size;
 
     //number of tessellation control point
     uint32 tesc_control_point;
