@@ -34,3 +34,6 @@
 [submodule "source/third_party/antumbralibs"]
 	path = source/third_party/antumbralibs
 	url = https://github.com/hanyangl5/antumbralibs.git
+[submodule "source/third_party/SPIRV-Cross"]
+	path = source/third_party/SPIRV-Cross
+	url = https://github.com/KhronosGroup/SPIRV-Cross.git

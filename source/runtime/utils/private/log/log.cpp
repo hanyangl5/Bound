@@ -1,3 +1,3 @@
-module log;
-
-namespace bd {} // namespace bd
+//module log;
+//
+//namespace bd {} // namespace bd
