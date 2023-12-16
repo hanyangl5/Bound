@@ -9,6 +9,7 @@
 --     add_files("runtime/*.cpp")
 --     add_packages("doctest")
 --     add_deps("utils", "platform")
+
 target("test")
     set_kind("binary")
     set_languages("cxx20")

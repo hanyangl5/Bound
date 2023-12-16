@@ -242,8 +242,8 @@ struct shader_compile_desc {
     shader_optimization_level optimization_level;
     shader_blob_type target_api;
     //bool b_need_reflection;
-    bd::vector<std::filesystem::path> include_search_path;
-    bd::vector<std::filesystem::path> defines;
+    bd::stl::vector<std::filesystem::path> include_search_path;
+    bd::stl::vector<std::filesystem::path> defines;
 };
 
 //inline constexpr bd::stl::array<char, 4> hsb_header{'h', 's', 'b', '1'};
@@ -295,7 +295,7 @@ struct ShaderResource {
 
     // resource name
     // const char *name;
-    bd::str name;
+    bd::stl::str name;
 
     // name size
     //uint32 name_size;
@@ -326,8 +326,8 @@ struct shader_reflection {
     // single large allocation for names to reduce number of allocations
     char *pNamePool;
     VertexInput *pVertexInputs;
-    bd::hash_map<bd::str, ShaderResource> resources;
-    bd::vector<uint32> sets;
+    bd::stl::map<bd::stl::str, ShaderResource> resources;
+    bd::stl::vector<uint32> sets;
     ShaderVariable *pVariables;
 
     const char *entry;
@@ -346,8 +346,8 @@ struct shader_reflection {
 };
 
 struct pipeline_reflection {
-    bd::vector<ShaderResource> m_resources;
-    bd::vector<uint32> sets; // 16bit set count, 16 bit binding count;
+    bd::stl::vector<ShaderResource> m_resources;
+    bd::stl::vector<uint32> sets; // 16bit set count, 16 bit binding count;
     //bd::vector<std::pair<const char*, ShaderResource>> m_resources;
     //gal_shader_stage mShaderStages;
     // the individual stages reflection data.

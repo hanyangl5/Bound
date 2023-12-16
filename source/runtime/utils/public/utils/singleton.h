@@ -18,8 +18,12 @@ template <typename T> class singleton {
 
     static T &get() noexcept(std::is_nothrow_constructible<T>::value) {
         static T instance;
+        initialized = true;
         return instance;
     }
+
+  protected:
+    static inline bool initialized = false;
 };
 
 } // namespace bd

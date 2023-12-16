@@ -298,7 +298,7 @@ void compiled_shader_group::create_pipeline_reflection() {
 
     //
     //
-    //    //Should we be using dynamic arrays for these? Perhaps we can add std::vector
+    //    //Should we be using dynamic arrays for these? Perhaps we can add bd::stl::vector
     //    // like functionality?
     //    ShaderResource *uniqueResources[512];
     //    ShaderStage shaderUsage[512];

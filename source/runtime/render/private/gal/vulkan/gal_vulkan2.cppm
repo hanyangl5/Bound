@@ -26,12 +26,13 @@ module;
 #define VMA_DEBUG_LOG(str) VMA_DEBUG_LOG_FORMAT("%s", (str))
 #endif
 #endif // NDEBUG
-#include "vk_mem_alloc.h"
-#include "render/gal/enum.h"
 #include "gal_vulkan_enum.h"
 #include "gal_vulkan_utils.h"
+#include "render/gal/enum.h"
+#include "vk_mem_alloc.h"
 
 #include "../shader/shader_compiler.h"
+//#include "utils/log.cppm"
 //#include "framework/utils/input/input.h"
 //#include "framework/utils/io/file_system.h"
 //
@@ -40,9 +41,9 @@ module;
 
 //#include "gal_vulkan.h"
 
-
+#define ANT_VK_API_VERSION VK_VERSION_1_3
 import blob;
-import log;
+//import log;
 import memory;
 import vector;
 import map;
@@ -60,49 +61,47 @@ namespace gal {
 //#undef GAL_IMPL_NULL
 //#endif // GAL_IMPL_NULL
 //};
+//VkDescriptorSetLayout g_empty_descriptor_set_layout = VK_NULL_HANDLE;
+//
+//gal_error_code create_empty_descriptor_set_layout(VkDevice device) {
+//    VkDescriptorSetLayoutCreateInfo ci{};
+//    ci.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+//    ci.pNext = nullptr;
+//    ci.flags = 0;
+//    ci.bindingCount = 0;
+//    ci.pBindings = nullptr;
+//    VkResult result = vkCreateDescriptorSetLayout(device, &ci, nullptr, &g_empty_descriptor_set_layout);
+//    if (result != VK_SUCCESS) {
+//        return gal_error_code::ERR;
+//    }
+//    return gal_error_code::SUC;
+//}
+//
+//gal_error_code destroy_empty_descriptor_set_layout(VkDevice device) {
+//    vkDestroyDescriptorSetLayout(device, g_empty_descriptor_set_layout, nullptr);
+//    return gal_error_code::SUC;
+//}
 
-class gal_impl_null : public gal_interface<gal_impl_null> {
-  public:
-    VkDescriptorSetLayout g_empty_descriptor_set_layout = VK_NULL_HANDLE;
+// gal_error_code result_to_gal_error_code(VkResult res) {
 
-    gal_error_code create_empty_descriptor_set_layout(VkDevice device) {
-        VkDescriptorSetLayoutCreateInfo ci{};
-        ci.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
-        ci.pNext = nullptr;
-        ci.flags = 0;
-        ci.bindingCount = 0;
-        ci.pBindings = nullptr;
-        VkResult result = vkCreateDescriptorSetLayout(device, &ci, nullptr, &g_empty_descriptor_set_layout);
-        if (result != VK_SUCCESS) {
-            return gal_error_code::ERR;
-        }
-        return gal_error_code::SUC;
-    }
-
-    gal_error_code destroy_empty_descriptor_set_layout(VkDevice device) {
-        vkDestroyDescriptorSetLayout(device, g_empty_descriptor_set_layout, nullptr);
-        return gal_error_code::SUC;
-    }
-
-    // gal_error_code result_to_gal_error_code(VkResult res) {
-
-    //}
-    // TODO(hyl5): chain macro to enable physical device features
-    // #define ADD_TO_NEXT_CHAIN(condition, next)         \
+//}
+// TODO(hyl5): chain macro to enable physical device features
+// #define ADD_TO_NEXT_CHAIN(condition, next)         \
     //    if ((condition)) {                             \
     //        base->pNext = (VkBaseOutStructure *)&next; \
     //        base = (VkBaseOutStructure *)base->pNext;  \
     //    }
 
-    constexpr uint32 utils_to_vk_queue_index(gal_queue_type type) { return static_cast<uint32>(type) - 1; }
-    constexpr uint32 graphics_queue_index = utils_to_vk_queue_index(gal_queue_type::graphcis);
-    constexpr uint32 compute_queue_index = utils_to_vk_queue_index(gal_queue_type::compute);
-    constexpr uint32 transfer_queue_index = utils_to_vk_queue_index(gal_queue_type::transfer);
+//constexpr uint32 utils_to_vk_queue_family_index(gal_queue_type queue_type, vk_context *vk_ctx) {
+//    return vk_ctx->queues[utils_to_vk_queue_index(queue_type)].queue_family_index;
+//}
+//constexpr uint32 utils_to_vk_queue_index(gal_queue_type type) { return static_cast<uint32>(type) - 1; }
+//constexpr uint32 graphics_queue_index = utils_to_vk_queue_index(gal_queue_type::graphcis);
+//constexpr uint32 compute_queue_index = utils_to_vk_queue_index(gal_queue_type::compute);
+//constexpr uint32 transfer_queue_index = utils_to_vk_queue_index(gal_queue_type::transfer);
 
-    constexpr uint32 utils_to_vk_queue_family_index(gal_queue_type queue_type, vk_context *vk_ctx) {
-        return vk_ctx->queues[utils_to_vk_queue_index(queue_type)].queue_family_index;
-    }
-
+class gal_impl_null : public gal_interface<gal_impl_null> {
+  public:
     //gal_error_code init_gal(gal_context *context) {
     //    vk_context *vk_ctx = bd::memory::alloc<vk_context>();
     //    if (vk_ctx == gal_null) {
@@ -122,7 +121,7 @@ class gal_impl_null : public gal_interface<gal_impl_null> {
     //    }
     //    return gal_error_code::SUC;
     //}
-
+    /*
     gal_error_code create_instance(gal_desc *gal_desc, gal_context *context) {
         vk_context *vk_ctx = reinterpret_cast<vk_context *>(*context);
         vk_ctx->m_gal_desc = *gal_desc;
@@ -821,7 +820,7 @@ class gal_impl_null : public gal_interface<gal_impl_null> {
             }
         }
         // gal_create_texture
-        gal_error_code gal_result = vk_create_texture(context, &textureDesc, &vk_rt->m_texture);
+        gal_error_code gal_result = create_texture(context, &textureDesc, &vk_rt->m_texture);
         if (gal_result != gal_error_code::SUC) {
             return gal_error_code::ERR;
         }
@@ -907,10 +906,10 @@ class gal_impl_null : public gal_interface<gal_impl_null> {
         }
 
         VkResult result = VK_SUCCESS;
-        if (glfwCreateWindowSurface(vk_ctx->instance, desc->window->m_window, nullptr, &vk_sc->m_surface) !=
-            VK_SUCCESS) {
+        //if (glfwCreateWindowSurface(vk_ctx->instance, desc->window->m_window, nullptr, &vk_sc->m_surface) !=
+         // VK_SUCCESS) {
             return gal_error_code::ERR;
-        }
+        //}
 
 #if 0
 
@@ -1672,7 +1671,7 @@ class gal_impl_null : public gal_interface<gal_impl_null> {
         vk_descriptor_pool *vk_dp = bd::memory::alloc<vk_descriptor_pool>();
 
         VkDescriptorPool pool = VK_NULL_HANDLE;
-        gal_error_code res = vk_create_descriptor_pool(context, &dp_desc, &pool);
+        gal_error_code res = create_descriptor_pool(context, &dp_desc, &pool);
         if (res != gal_error_code::SUC) {
             return gal_error_code::ERR;
         }
@@ -1710,7 +1709,7 @@ class gal_impl_null : public gal_interface<gal_impl_null> {
         }
 
         if (free_all_pool || --vk_ds->pool->ref_count == 0) {
-            vk_destroy_descriptor_pool(vk_ctx, vk_ds->pool);
+            destroy_descriptor_pool(vk_ctx, vk_ds->pool);
             bd::memory::afree(vk_ds->pool);
             vk_ds->pool = nullptr;
         } else {
@@ -1867,7 +1866,7 @@ class gal_impl_null : public gal_interface<gal_impl_null> {
         }
 
         // FIXME(hyl5): too many nested containers here
-        bd::stl::vector<bd::hash_map<VkDescriptorType, uint32>> pool_sizes;
+        bd::stl::vector<bd::stl::hash_map<VkDescriptorType, uint32>> pool_sizes;
         pool_sizes.resize(refl->sets.size());
         // fill descriptor_pool sizes;
         for (auto &resource : refl->m_resources) {
@@ -2275,8 +2274,8 @@ class gal_impl_null : public gal_interface<gal_impl_null> {
         return gal_error_code::SUC;
     }
     gal_error_code cmd_set_render_target() { return gal_error_code::SUC; }
-    gal_error_code cmd_set_viewport(gal_command_list command, f32 x, f32 y, f32 width, f32 height, f32 min_depth,
-                                    f32 max_depth) {
+    gal_error_code cmd_set_viewport(gal_command_list command, float32 x, float32 y, float32 width, float32 height,
+                                    float32 min_depth, float32 max_depth) {
         vk_command_list *vk_cmd = reinterpret_cast<vk_command_list *>(command);
 
         VkViewport viewport{};
@@ -2943,6 +2942,7 @@ class gal_impl_null : public gal_interface<gal_impl_null> {
     //    }
     //    return gal_error_code::SUC;
     //}
+    */
 };
 
 } // namespace gal

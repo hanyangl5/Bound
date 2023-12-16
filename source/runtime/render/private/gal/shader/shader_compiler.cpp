@@ -1,7 +1,7 @@
 #include "shader_compiler.h"
+#include "utils/log.cppm"
+import filesystem;
 
-#include "framework/utils/io/file_system.h"
-import log
 
 
 //namespace std {

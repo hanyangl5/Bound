@@ -4,5 +4,6 @@ includes(
     "mimalloc-xmake/xmake.lua",
     "D3D12MemoryAllocator/xmake.lua",
     "spdlog-xmake/xmake.lua",
-    "antumbralibs/xmake.lua"
+    "antumbralibs/xmake.lua",
+    "SPIRV-Cross/xmake.lua"
 )

@@ -19,7 +19,7 @@ auto test_array = []() {
 
 auto test_vector = []() {
     std::printf("vector test\n");
-    bd::stl::vector<bd::int32> arr;
+    std::vector<bd::int32> arr;
     for (bd::int32 i = 0; i < 5; i++) {
         arr.push_back(i);
     }
