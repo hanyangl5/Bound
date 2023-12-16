@@ -1,8 +1,8 @@
-export module platform;
+#pragma once
 
 import types;
 import task;
-export namespace bd {
+namespace bd {
 
 enum class window_mode : uint8 { wm_windowed, wm_fullscreen, wm_borderless };
 

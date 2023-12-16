@@ -1,8 +1,7 @@
-import types;
+#pragma once
+#include "types.h"
 
-export module blob;
-
-export namespace bd {
+namespace bd {
 
 struct blob {
   public:
@@ -12,9 +11,7 @@ struct blob {
     }
     inline void *data() const { return m_data; }
     inline uint64 size() const { return m_size; }
-    inline void release() {
-        
-    }
+    inline void release() {}
     inline void reset() {
         m_data = nullptr;
         m_size = 0;

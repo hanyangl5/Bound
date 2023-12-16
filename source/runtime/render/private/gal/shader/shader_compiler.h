@@ -1,9 +1,10 @@
 #pragma once
 
-// standard libraries
-#include <filesystem>
+#include "render/gal/enum.h"
+#include "utils/blob.h"
+#include "utils/cxx_helper.h"
+#include "utils/singleton.h"
 
-// third party libraries
 // #ifdef _WIN32
 // #include <dxcompilerd3d12shader.h>
 // #else
@@ -15,18 +16,14 @@
 #include <dxcompiler/WinAdapter.h>
 #endif
 #include <dxcompiler/dxcapi.h>
-// project headers
-#include "render/gal/enum.h"
-#include "utils/singleton.h"
 
-#include "utils/cxx_helper.h"
-
-import types;
-import blob;
+#include <filesystem>
 
 // enums
 // antumbra shader compiler
 namespace bd::gal {
+
+constexpr bd::stl::str shader_compiler_logger = "shader_compiler";
 
 enum class shader_optimization_level { NONE, O0, O1, O2, O3 };
 

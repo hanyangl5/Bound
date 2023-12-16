@@ -1,12 +1,7 @@
-module;
-
+#pragma once
 #include <thread>
 
-export module task;
-
-//import :time;
-
-export namespace bd {
+namespace bd {
 using thread = std::thread;
 
 namespace task {

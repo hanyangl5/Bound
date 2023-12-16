@@ -1,11 +1,8 @@
-module;
-
+#pragma once
 // TODO(hyl5): add https://github.com/HowardHinnant/date
 #include <chrono>
 
-export module time;
-
-export namespace bd {
+namespace bd {
 namespace time {
 
 using nano = std::chrono::nanoseconds;

@@ -1,5 +1,4 @@
-module;
-
+#pragma  once
 #include <memory>
 #include <source_location>
 
@@ -7,11 +6,10 @@ module;
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/spdlog.h>
 
-export module log;
-import types;
-import map;
-import string;
-export namespace bd {
+
+#include "types.h"
+#include <stl/containers.h>
+namespace bd {
 
 constexpr bd::stl::str default_logger = "BD";
 

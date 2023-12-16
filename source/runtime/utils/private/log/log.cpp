@@ -1,3 +1,1 @@
-//module log;
-//
-//namespace bd {} // namespace bd
+#include "utils/log.h"

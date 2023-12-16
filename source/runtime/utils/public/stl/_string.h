@@ -1,10 +1,10 @@
-module;
 
+#pragma once
 #include <string>
 #include <string_view>
-export module string;
 
-export namespace bd {
+
+namespace bd {
     namespace stl {
     using str = std::string;
     using wstr = std::wstring;

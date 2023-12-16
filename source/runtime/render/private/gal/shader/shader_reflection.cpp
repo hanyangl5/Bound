@@ -1,10 +1,12 @@
 #include "shader_compiler.h"
 
+#include "utils/blob.h"
+#include "utils/log.h"
+#include "utils/memory.h"
+
 // #include <dxcompiler/dxcapi.h>
 #include <dxcapi.h>
 #include <spirv_cross.hpp>
-
-
 
 namespace bd::gal {
 
@@ -78,12 +80,15 @@ void compiled_shader::create_shader_reflection() {
 
 const blob *compiled_shader::byte_code() const { return &m_byte_code; }
 
-const shader_reflection *compiled_shader::reflection() const { return m_reflection != nullptr ? m_reflection : nullptr; }
+const shader_reflection *compiled_shader::reflection() const {
+    return m_reflection != nullptr ? m_reflection : nullptr;
+}
 
 const char *compiled_shader::entry() { return m_entry; }
 
 void compiled_shader::create_shader_reflection_from_spirv() {
-    spirv_cross::Compiler compiler(static_cast<uint32 *>(this->m_byte_code.data()), this->m_byte_code.size() / sizeof(uint32));
+    spirv_cross::Compiler compiler(static_cast<uint32 *>(this->m_byte_code.data()),
+                                   this->m_byte_code.size() / sizeof(uint32));
 
     auto &spv_entry = compiler.get_entry_point({this->m_entry}, compiler.get_execution_model());
 
@@ -119,7 +124,7 @@ void compiled_shader::create_shader_reflection_from_spirv() {
     //count += static_cast<uint32>(resources.push_constant_buffers.size()); // push constants
     // count += (uint32)resources.acceleration_structures.size(); // raytracing structures
 
-    bd::hash_map<uint32, uint32> used_sets;
+    bd::stl::hash_map<uint32, uint32> used_sets;
     // stage inputs
     for (auto &input : resources.stage_inputs) {
         ShaderResource resource;
@@ -158,7 +163,7 @@ void compiled_shader::create_shader_reflection_from_spirv() {
 
         resource.descriptor_type = gal_descriptor_type::PUSH_CONSTANT;
         resource.resource_type = ShaderResourceType::PUSH_CONSTANT;
-        const spirv_cross::SPIRType& type = compiler.get_type(input.type_id);
+        const spirv_cross::SPIRType &type = compiler.get_type(input.type_id);
         resource.size = static_cast<uint32>(compiler.get_declared_struct_size(type));
         resource.name = {input.name.begin(), input.name.end()};
         m_reflection->resources.emplace(std::move(resource.name), std::move(resource));
@@ -244,7 +249,7 @@ void compiled_shader::create_shader_reflection_from_spirv() {
 void compiled_shader_group::create_pipeline_reflection() {
     //Parameter checks
     if (m_stage_flags == gal_shader_stage::UNDEFINED) {
-        LOG_ERROR("Parameter 'stageCount' is 0.");
+        Log::log(shader_compiler_logger, loglevel::error, "Parameter 'stageCount' is 0.");
         return;
     }
 

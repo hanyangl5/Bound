@@ -24,8 +24,7 @@ SOFTWARE.
 
 #pragma once
 
-import types;
-
+#include "utils/types.h"
 namespace bd::gal {
 
 enum class gal_texture_format {
@@ -716,7 +715,9 @@ constexpr bool gal_tf_is_depth_and_stencil(gal_texture_format fmt) {
     }
 }
 
-constexpr bool gal_tf_has_depth(gal_texture_format fmt) { return gal_tf_is_depth_only(fmt) || gal_tf_is_depth_and_stencil(fmt); }
+constexpr bool gal_tf_has_depth(gal_texture_format fmt) {
+    return gal_tf_is_depth_only(fmt) || gal_tf_is_depth_and_stencil(fmt);
+}
 
 constexpr bool gal_tf_has_stencil(gal_texture_format fmt) {
     return gal_tf_is_stencil_only(fmt) || gal_tf_is_depth_and_stencil(fmt);
@@ -1511,7 +1512,7 @@ constexpr uint32 gal_tf_num_of_planes(gal_texture_format fmt) {
 constexpr uint32 gal_tf_plane_width(gal_texture_format fmt, uint32_t plane, uint32_t width) {
     if (0 == plane) {
         return width;
-}
+    }
 
     switch (fmt) {
     case gal_texture_format::G8_B8_R8_3PLANE_420_UNORM:
@@ -7415,6 +7416,5 @@ constexpr gal_texture_format FromName(char *p) {
 constexpr uint32_t PixelCountOfBlock(gal_texture_format fmt) {
     return gal_tf_width_of_block(fmt) * gal_tf_height_of_block(fmt) * gal_tf_depth_of_block(fmt);
 }
-
 
 } // namespace bd::gal

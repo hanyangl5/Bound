@@ -19,6 +19,8 @@ else
     
 end
 
+add_rules("mode.release", "mode.debug")
+
 includes("third_party/")
 includes("runtime/")
 includes("tests/")

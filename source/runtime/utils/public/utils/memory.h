@@ -4,14 +4,11 @@
 //       header (which should be in rare cases, and usually only in core Forge source),
 //       define "IMEMORY_FROM_HEADER" before including it.
 //--------------------------------------------------------------------------------------------
-module;
+#pragma once
+#include "types.h"
 #include <mimalloc.h>
 
-export module memory;
-import types;
-
-
-export namespace bd {
+namespace bd {
 
 constexpr uint64 BD_KB = 1024ull;
 constexpr uint64 BD_MB = 1024ull * BD_KB;

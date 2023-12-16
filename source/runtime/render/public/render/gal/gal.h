@@ -2,13 +2,12 @@
 
 #include "enum.h"
 
-import types;
+#include "utils/types.h"
 
-namespace bd::gal {
+namespace bd {
+namespace gal {
 
-// intailize gal_context, load function pointer
-// [[nodiscard]] gal_error_code init_gal(gal_api api, gal_context *context);
-
+// concept
 //template <typename gal_impl>
 //concept gal_interface = requires(gal_impl impl) {
 //#ifndef GAL_REQUIRES
@@ -20,7 +19,6 @@ namespace bd::gal {
 
 template <class gal_impl> struct gal_interface {
   public:
-    //void name() { (static_cast<gal_impl *>(this))->impl(); }
 #ifndef GAL_INTERFACE
 #define GAL_INTERFACE
 #include "helper/helper_macro2.h"
@@ -28,4 +26,5 @@ template <class gal_impl> struct gal_interface {
 #endif // GAL_REQUIRES
 };
 
-} // namespace bd::gal
+} // namespace gal
+} // namespace bd

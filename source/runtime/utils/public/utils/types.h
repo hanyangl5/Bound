@@ -1,10 +1,13 @@
-module;
+#pragma once
 
 #include <cstdint>
+#ifdef _MSC_VER
+#include <utility>
+#elif __clang__
+#include <functional> // std::hash is defined in functional in clang
+#endif
 
-export module types;
-
-export namespace bd {
+namespace bd {
 using uint8 = uint8_t;
 using uint16 = uint16_t;
 using uint32 = uint32_t;

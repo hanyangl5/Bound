@@ -1,8 +1,9 @@
 #include "shader_compiler.h"
-#include "utils/log.cppm"
-import filesystem;
 
-
+#include <utils/log.h>
+#include <utils/filesystem.h>
+#include <stl/containers.h>
+#include <utils/memory.h>
 
 //namespace std {
 //template <typename X, typename Y> struct std::hash<std::pair<X, Y>> {
@@ -28,25 +29,25 @@ namespace bd::gal {
 //static std::filesystem::path cached_shader_dir = cached_project_dir / "shader";
 
 shader_compiler::shader_compiler() noexcept {
-    //HMODULE dxil_module = ::LoadLibrary("dxil.dll");
-    //if (!dxil_module) {
-    //LOG_ERROR("failed to find dxil library");
-    //    return;
-    //}
+    // HMODULE dxil_module = ::LoadLibrary("dxil.dll");
+    // if (!dxil_module) {
+    // LOG_ERROR("failed to find dxil library");
+    //     return;
+    // }
     HRESULT hr = 0;
     hr = (DxcCreateInstance(CLSID_DxcCompiler, IID_PPV_ARGS(&m_idxc_compiler)));
     if (FAILED(hr)) {
-        LOG_ERROR("failed to create idxc compiler");
+        Log::log(shader_compiler_logger, Log::loglevel::error, "failed to create dxc compiler");
         return;
     }
     hr = (DxcCreateInstance(CLSID_DxcUtils, IID_PPV_ARGS(&m_idxc_utils)));
     if (FAILED(hr)) {
-        LOG_ERROR("failed to create idxc utils");
+        bd::Log::log(shader_compiler_logger, loglevel::error, "failed to create idxc utils");
         return;
     }
     hr = (m_idxc_utils->CreateDefaultIncludeHandler((&m_idxc_include_handler)));
     if (FAILED(hr)) {
-        LOG_ERROR("failed to create idxc include handler");
+        bd::Log::log(shader_compiler_logger, loglevel::error, "failed to create idxc include handler");
         return;
     }
 }
@@ -180,290 +181,292 @@ shader_compiler::~shader_compiler() noexcept = default;
 //}
 
 compiled_shader *shader_compiler::compile(shader_source_blob *blob, shader_compile_desc *desc) {
-    IDxcBlobEncoding *hlsl_blob = nullptr;
+   IDxcBlobEncoding *hlsl_blob = nullptr;
 
-    bool b_spv = desc->target_api == shader_blob_type::SPIRV;
+   bool b_spv = desc->target_api == shader_blob_type::SPIRV;
 
-    HRESULT hr = (m_idxc_utils->CreateBlob(blob->data(), static_cast<uint32>(blob->size()), 0, &hlsl_blob));
-    if (FAILED(hr)) {
-        LOG_ERROR("failed to create blob");
-        return nullptr;
-    }
-    bd::vector<LPCWSTR> args;
+   HRESULT hr = (m_idxc_utils->CreateBlob(blob->data(), static_cast<uint32>(blob->size()), 0, &hlsl_blob));
+   if (FAILED(hr)) {
+       bd::Log::log(shader_compiler_logger, loglevel::error, "failed to create blob");
 
-    // entry point
-    args.push_back(L"-E");
-    WCHAR entry[64];
-    swprintf(entry, 64, L"%hs", desc->entry);
-    args.push_back(entry);
-    // target profile
-    args.push_back(L"-T");
-    const wchar_t *tp = utils_to_hlsl_target_profile(desc->target_profile);
-    args.push_back(tp);
+       return nullptr;
+   }
+   bd::stl::vector<LPCWSTR> args;
 
-    //args.push_back(DXC_ARG_WARNINGS_ARE_ERRORS); // warning are errors
-    args.push_back(DXC_ARG_ALL_RESOURCES_BOUND);
+   // entry point
+   args.push_back(L"-E");
+   WCHAR entry[64];
+   swprintf(entry, 64, L"%hs", desc->entry);
+   args.push_back(entry);
+   // target profile
+   args.push_back(L"-T");
+   const wchar_t *tp = utils_to_hlsl_target_profile(desc->target_profile);
+   args.push_back(tp);
 
-    for (auto &d : desc->defines) {
-        args.push_back(L"-D");
-        args.push_back(d.wstring().c_str());
-    }
+   //args.push_back(DXC_ARG_WARNINGS_ARE_ERRORS); // warning are errors
+   args.push_back(DXC_ARG_ALL_RESOURCES_BOUND);
 
-    for (auto &i : desc->include_search_path) {
-        args.push_back(L"-I");
-        args.push_back(i.wstring().c_str());
-    }
+   for (auto &d : desc->defines) {
+       args.push_back(L"-D");
+       args.push_back(d.wstring().c_str());
+   }
 
-    args.push_back(L"-HV 2021");
+   for (auto &i : desc->include_search_path) {
+       args.push_back(L"-I");
+       args.push_back(i.wstring().c_str());
+   }
 
-    { args.push_back(DXC_ARG_PACK_MATRIX_ROW_MAJOR); }
+   args.push_back(L"-HV 2021");
 
-    switch (desc->optimization_level) {
-    case shader_optimization_level::NONE:
-        args.push_back(DXC_ARG_DEBUG);
-        args.push_back(DXC_ARG_SKIP_OPTIMIZATIONS);
-        break;
-    case shader_optimization_level::O0:
-        args.push_back(DXC_ARG_OPTIMIZATION_LEVEL0);
-        break;
-    case shader_optimization_level::O1:
-        args.push_back(DXC_ARG_OPTIMIZATION_LEVEL1);
-        break;
-    case shader_optimization_level::O2:
-        args.push_back(DXC_ARG_OPTIMIZATION_LEVEL2);
-        break;
-    case shader_optimization_level::O3:
-        args.push_back(DXC_ARG_OPTIMIZATION_LEVEL3);
-        break;
-    default:
-        break;
-    }
+   { args.push_back(DXC_ARG_PACK_MATRIX_ROW_MAJOR); }
 
-    if (b_spv) {
-        args.push_back(L"-spirv");
-        args.push_back(L"-fspv-target-env=vulkan1.3");
-        //args.push_back(L"-fspv-reflect");
-        //args.push_back(L"-fvk-use-dx-layout");// FIXME(hylu): add this will cause a validation error
-        args.push_back(L"-fvk-use-dx-position-w");
-    }
+   switch (desc->optimization_level) {
+   case shader_optimization_level::NONE:
+       args.push_back(DXC_ARG_DEBUG);
+       args.push_back(DXC_ARG_SKIP_OPTIMIZATIONS);
+       break;
+   case shader_optimization_level::O0:
+       args.push_back(DXC_ARG_OPTIMIZATION_LEVEL0);
+       break;
+   case shader_optimization_level::O1:
+       args.push_back(DXC_ARG_OPTIMIZATION_LEVEL1);
+       break;
+   case shader_optimization_level::O2:
+       args.push_back(DXC_ARG_OPTIMIZATION_LEVEL2);
+       break;
+   case shader_optimization_level::O3:
+       args.push_back(DXC_ARG_OPTIMIZATION_LEVEL3);
+       break;
+   default:
+       break;
+   }
 
-    DxcBuffer source_buffer;
-    source_buffer.Ptr = hlsl_blob->GetBufferPointer();
-    source_buffer.Size = hlsl_blob->GetBufferSize();
-    source_buffer.Encoding = 0;
+   if (b_spv) {
+       args.push_back(L"-spirv");
+       args.push_back(L"-fspv-target-env=vulkan1.3");
+       //args.push_back(L"-fspv-reflect");
+       //args.push_back(L"-fvk-use-dx-layout");// FIXME(hylu): add this will cause a validation error
+       args.push_back(L"-fvk-use-dx-position-w");
+   }
 
-    IDxcResult *compile_result = nullptr;
-    if (FAILED(m_idxc_compiler->Compile(&source_buffer, args.data(), static_cast<uint32>(args.size()),
-                                        m_idxc_include_handler, IID_PPV_ARGS(&compile_result)))) {
-        LOG_ERROR("{}", "Internal error or API misuse! Compile Failed");
-        return nullptr;
-    }
+   DxcBuffer source_buffer;
+   source_buffer.Ptr = hlsl_blob->GetBufferPointer();
+   source_buffer.Size = hlsl_blob->GetBufferSize();
+   source_buffer.Encoding = 0;
 
-    IDxcBlob *byte_code = nullptr;
-    IDxcBlob *pdb = nullptr;
-    IDxcBlob *hash = nullptr;
-    IDxcBlob *reflection = nullptr;
+   IDxcResult *compile_result = nullptr;
+   if (FAILED(m_idxc_compiler->Compile(&source_buffer, args.data(), static_cast<uint32>(args.size()),
+                                       m_idxc_include_handler, IID_PPV_ARGS(&compile_result)))) {
+       bd::Log::log(shader_compiler_logger, loglevel::error, "Internal error or API misuse! Compile Failed");
+       return nullptr;
+   }
 
-    //HRESULT hrStatus;
-    //if (FAILED(compile_result->GetStatus(&hrStatus)) || FAILED(hrStatus)) {
-    //    // Compilation failed, but successful HRESULT was returned.
-    //    // Could reuse the compiler and allocator objects. For simplicity, exit here anyway
-    //    LOG_ERROR("compilation faild");
-    //    return nullptr;
-    //}
-    // Get compilation errors (if any).
-    IDxcBlobUtf8 *errors = nullptr;
+   IDxcBlob *byte_code = nullptr;
+   IDxcBlob *pdb = nullptr;
+   IDxcBlob *hash = nullptr;
+   IDxcBlob *reflection = nullptr;
 
-    if (SUCCEEDED(compile_result->GetOutput(DXC_OUT_ERRORS, IID_PPV_ARGS(&errors), nullptr)) && errors != nullptr &&
-        errors->GetStringLength() != 0) {
-        LOG_ERROR("Warnings and Errors: {}", errors->GetStringPointer());
-        // dxc don't have official dxil signing library for macos
+   //HRESULT hrStatus;
+   //if (FAILED(compile_result->GetStatus(&hrStatus)) || FAILED(hrStatus)) {
+   //    // Compilation failed, but successful HRESULT was returned.
+   //    // Could reuse the compiler and allocator objects. For simplicity, exit here anyway
+   //    LOG_ERROR("compilation faild");
+   //    return nullptr;
+   //}
+   // Get compilation errors (if any).
+   IDxcBlobUtf8 *errors = nullptr;
+
+   if (SUCCEEDED(compile_result->GetOutput(DXC_OUT_ERRORS, IID_PPV_ARGS(&errors), nullptr)) && errors != nullptr &&
+       errors->GetStringLength() != 0) {
+
+       bd::Log::log(shader_compiler_logger, loglevel::error, "Warnings and Errors: {}", errors->GetStringPointer());
+       // dxc don't have official dxil signing library for macos
 #if defined(__APPLE__)
-        const char* dxil_sign_warning = "warning: DXIL signing library (dxil.dll,libdxil.so) not found.  Resulting "
-                                        "DXIL will not be signed for use in release environments.";
-        if (strncmp(dxil_sign_warning, errors->GetStringPointer(), 130) == 0 && errors->GetStringLength()==133) {
-            LOG_INFO("ignored, dxc warn only");
-        }
+       const char *dxil_sign_warning = "warning: DXIL signing library (dxil.dll,libdxil.so) not found.  Resulting "
+                                       "DXIL will not be signed for use in release environments.";
+       if (strncmp(dxil_sign_warning, errors->GetStringPointer(), 130) == 0 && errors->GetStringLength() == 133) {
+           LOG_INFO("ignored, dxc warn only");
+       }
 #else
-        return nullptr;
+       return nullptr;
 #endif
-    }
+   }
 
-    if (FAILED(compile_result->GetOutput(DXC_OUT_OBJECT, IID_PPV_ARGS(&byte_code), nullptr)) || byte_code == nullptr) {
-        LOG_ERROR("failed to get DXC_OUT_OBJECT");
-        return nullptr;
-    }
+   if (FAILED(compile_result->GetOutput(DXC_OUT_OBJECT, IID_PPV_ARGS(&byte_code), nullptr)) || byte_code == nullptr) {
+       bd::Log::log(shader_compiler_logger, loglevel::error, "failed to get DXC_OUT_OBJECT");
+       return nullptr;
+   }
 
-    // TODO(hylu): fix error when gte pdb
-    //if (FAILED(compile_result->GetOutput(DXC_OUT_PDB, IID_PPV_ARGS(&pdb), nullptr)) || pdb == nullptr) {
-    //    LOG_ERROR("failed to get DXC_OUT_PDB");
-    //    return nullptr;
-    //}
-    if (!b_spv && FAILED(compile_result->GetOutput(DXC_OUT_SHADER_HASH, IID_PPV_ARGS(&hash), nullptr))) {
-        LOG_ERROR("failed to get DXC_OUT_SHADER_HASH");
-        return nullptr;
-    }
+   // TODO(hylu): fix error when gte pdb
+   //if (FAILED(compile_result->GetOutput(DXC_OUT_PDB, IID_PPV_ARGS(&pdb), nullptr)) || pdb == nullptr) {
+   //    LOG_ERROR("failed to get DXC_OUT_PDB");
+   //    return nullptr;
+   //}
+   if (!b_spv && FAILED(compile_result->GetOutput(DXC_OUT_SHADER_HASH, IID_PPV_ARGS(&hash), nullptr))) {
+       Log::log(shader_compiler_logger, loglevel::error, "failed to get DXC_OUT_SHADER_HASH");
+       return nullptr;
+   }
 
-    if (!b_spv && FAILED(compile_result->GetOutput(DXC_OUT_REFLECTION, IID_PPV_ARGS(&reflection), nullptr))) {
-        LOG_ERROR("failed tot get DXC_OUT_REFLECTION");
-        return nullptr;
-    }
+   if (!b_spv && FAILED(compile_result->GetOutput(DXC_OUT_REFLECTION, IID_PPV_ARGS(&reflection), nullptr))) {
+       Log::log(shader_compiler_logger, loglevel::error, "failed tot get DXC_OUT_REFLECTION");
+       return nullptr;
+   }
 
-    compiled_shader *ret = bd::memory::alloc<compiled_shader>();
-    if (ret == nullptr) {
-        LOG_ERROR("failed to create compiled shader");
-        return nullptr;
-    }
-    if (byte_code != nullptr) {
-        ret->m_byte_code.set(byte_code->GetBufferPointer(), byte_code->GetBufferSize());
-        ret->m_p_byte_code = byte_code;
-    }
-    if (pdb != nullptr) {
-        ret->m_pdb.set(pdb->GetBufferPointer(), pdb->GetBufferSize());
-        ret->m_p_pdb = pdb;
-    }
-    if (hash != nullptr) {
-        ret->m_hash.set(hash->GetBufferPointer(), hash->GetBufferSize());
-        ret->m_p_hash = hash;
-    }
-    if (reflection != nullptr) {
-        ret->m_dxc_reflection.set(reflection->GetBufferPointer(), reflection->GetBufferSize());
-        ret->m_p_dxc_reflection = reflection;
-    }
-    ret->m_entry = desc->entry;
-    ret->m_type = desc->target_api;
+   compiled_shader *ret = bd::memory::alloc<compiled_shader>();
+   if (ret == nullptr) {
+       Log::log(shader_compiler_logger, loglevel::error, "failed to create compiled shader");
+       return nullptr;
+   }
+   if (byte_code != nullptr) {
+       ret->m_byte_code.set(byte_code->GetBufferPointer(), byte_code->GetBufferSize());
+       ret->m_p_byte_code = byte_code;
+   }
+   if (pdb != nullptr) {
+       ret->m_pdb.set(pdb->GetBufferPointer(), pdb->GetBufferSize());
+       ret->m_p_pdb = pdb;
+   }
+   if (hash != nullptr) {
+       ret->m_hash.set(hash->GetBufferPointer(), hash->GetBufferSize());
+       ret->m_p_hash = hash;
+   }
+   if (reflection != nullptr) {
+       ret->m_dxc_reflection.set(reflection->GetBufferPointer(), reflection->GetBufferSize());
+       ret->m_p_dxc_reflection = reflection;
+   }
+   ret->m_entry = desc->entry;
+   ret->m_type = desc->target_api;
 
-    if (b_spv) {
-        ret->m_reflection = bd::memory::alloc<shader_reflection>();
-        ret->create_shader_reflection();
-    }
+   if (b_spv) {
+       ret->m_reflection = bd::memory::alloc<shader_reflection>();
+       ret->create_shader_reflection();
+   }
 
-    return ret;
+   return ret;
 }
 
 void compiled_shader::release() {
-    if (m_p_byte_code != nullptr) {
-        reinterpret_cast<IDxcBlob *>(m_p_byte_code)->Release();
-        m_byte_code.reset();
-    }
-    if (m_p_dxc_reflection != nullptr) {
-        reinterpret_cast<IDxcBlob *>(m_p_dxc_reflection)->Release();
-        m_dxc_reflection.reset();
-    }
-    if (m_p_pdb != nullptr) {
-        reinterpret_cast<IDxcBlob *>(m_p_pdb)->Release();
-        m_pdb.reset();
-    }
-    if (m_p_hash != nullptr) {
-        reinterpret_cast<IDxcBlob *>(m_p_hash)->Release();
-        m_hash.reset();
-    }
+   if (m_p_byte_code != nullptr) {
+       reinterpret_cast<IDxcBlob *>(m_p_byte_code)->Release();
+       m_byte_code.reset();
+   }
+   if (m_p_dxc_reflection != nullptr) {
+       reinterpret_cast<IDxcBlob *>(m_p_dxc_reflection)->Release();
+       m_dxc_reflection.reset();
+   }
+   if (m_p_pdb != nullptr) {
+       reinterpret_cast<IDxcBlob *>(m_p_pdb)->Release();
+       m_pdb.reset();
+   }
+   if (m_p_hash != nullptr) {
+       reinterpret_cast<IDxcBlob *>(m_p_hash)->Release();
+       m_hash.reset();
+   }
 
-    memory::afree(m_reflection);
+   memory::afree(m_reflection);
 }
 
 void compiled_shader_group::set_from_source(shader_source_blob *source, shader_gourp_source_desc *descs) {
-    shader_compiler sc;
-    if (descs->desc_vert != nullptr) {
-        compiled_shader *ret = sc.compile(source, descs->desc_vert);
-        if (ret == nullptr) {
-            LOG_ERROR("failed to compile vertex shader");
-            return;
-        }
-        m_vert = ret;
-        m_stage_flags |= gal_shader_stage::VERT;
-    }
-    if (descs->desc_frag != nullptr) {
-        compiled_shader *ret = sc.compile(source, descs->desc_frag);
-        if (ret == nullptr) {
-            LOG_ERROR("failed to compile hull shader");
-            return;
-        }
-        m_frag = ret;
-        m_stage_flags |= gal_shader_stage::FRAG;
-    }
-    if (descs->desc_geom != nullptr) {
-        compiled_shader *ret = sc.compile(source, descs->desc_geom);
-        if (ret == nullptr) {
-            LOG_ERROR("failed to compile geometry shader");
-            return;
-        }
-        m_geom = ret;
-        m_stage_flags |= gal_shader_stage::GEOM;
-    }
-    if (descs->desc_hull != nullptr) {
-        compiled_shader *ret = sc.compile(source, descs->desc_hull);
-        if (ret == nullptr) {
-            LOG_ERROR("failed to compile hull shader");
-            return;
-        }
-        m_hull = sc.compile(source, descs->desc_hull);
-        m_stage_flags |= gal_shader_stage::HULL;
-    }
-    if (descs->desc_domin != nullptr) {
-        compiled_shader *ret = sc.compile(source, descs->desc_domin);
-        if (ret == nullptr) {
-            LOG_ERROR("failed to compile domain shader");
-            return;
-        }
-        m_domain = ret;
-        m_stage_flags |= gal_shader_stage::DOMN;
-    }
-    if (descs->desc_comp != nullptr) {
-        compiled_shader *ret = sc.compile(source, descs->desc_comp);
-        if (ret == nullptr) {
-            LOG_ERROR("failed to compile compute shader");
-            return;
-        }
-        m_comp = ret;
-        m_stage_flags |= gal_shader_stage::COMP;
-    }
-    // FIXME(hyl5): error handling? release memory?
-    m_b_same_root_signature = true;
-    create_pipeline_reflection();
+   shader_compiler sc;
+   if (descs->desc_vert != nullptr) {
+       compiled_shader *ret = sc.compile(source, descs->desc_vert);
+       if (ret == nullptr) {
+           Log::log(shader_compiler_logger, loglevel::error, "failed to compile vert shader");
+           return;
+       }
+       m_vert = ret;
+       m_stage_flags |= gal_shader_stage::VERT;
+   }
+   if (descs->desc_frag != nullptr) {
+       compiled_shader *ret = sc.compile(source, descs->desc_frag);
+       if (ret == nullptr) {
+           Log::log(shader_compiler_logger, loglevel::error, "failed to compile frag shader");
+           return;
+       }
+       m_frag = ret;
+       m_stage_flags |= gal_shader_stage::FRAG;
+   }
+   if (descs->desc_geom != nullptr) {
+       compiled_shader *ret = sc.compile(source, descs->desc_geom);
+       if (ret == nullptr) {
+           Log::log(shader_compiler_logger, loglevel::error, "failed to compile geom shader");
+           return;
+       }
+       m_geom = ret;
+       m_stage_flags |= gal_shader_stage::GEOM;
+   }
+   if (descs->desc_hull != nullptr) {
+       compiled_shader *ret = sc.compile(source, descs->desc_hull);
+       if (ret == nullptr) {
+           Log::log(shader_compiler_logger, loglevel::error, "failed to compile hull shader");
+           return;
+       }
+       m_hull = sc.compile(source, descs->desc_hull);
+       m_stage_flags |= gal_shader_stage::HULL;
+   }
+   if (descs->desc_domin != nullptr) {
+       compiled_shader *ret = sc.compile(source, descs->desc_domin);
+       if (ret == nullptr) {
+           Log::log(shader_compiler_logger, loglevel::error, "failed to compile domain shader");
+           return;
+       }
+       m_domain = ret;
+       m_stage_flags |= gal_shader_stage::DOMN;
+   }
+   if (descs->desc_comp != nullptr) {
+       compiled_shader *ret = sc.compile(source, descs->desc_comp);
+       if (ret == nullptr) {
+           Log::log(shader_compiler_logger, loglevel::error, "failed to compile compute shader");
+           return;
+       }
+       m_comp = ret;
+       m_stage_flags |= gal_shader_stage::COMP;
+   }
+   // FIXME(hyl5): error handling? release memory?
+   m_b_same_root_signature = true;
+   create_pipeline_reflection();
 }
 
 void compiled_shader_group::set(compiled_shader_gourp_desc *desc) {
-    m_vert = desc->vert;
-    m_frag = desc->frag;
-    m_domain = desc->domain;
-    m_hull = desc->hull;
-    m_geom = desc->geom;
-    m_comp = desc->comp;
-    if (desc->vert != nullptr) {
-        m_stage_flags |= gal_shader_stage::VERT;
-    }
-    if (desc->frag != nullptr) {
-        m_stage_flags |= gal_shader_stage::FRAG;
-    }
-    if (desc->comp != nullptr) {
-        m_stage_flags |= gal_shader_stage::COMP;
-    }
-    if (desc->domain != nullptr) {
-        m_stage_flags |= gal_shader_stage::DOMN;
-    }
-    if (desc->hull != nullptr) {
-        m_stage_flags |= gal_shader_stage::HULL;
-    }
-    if (desc->geom != nullptr) {
-        m_stage_flags |= gal_shader_stage::GEOM;
-    }
+   m_vert = desc->vert;
+   m_frag = desc->frag;
+   m_domain = desc->domain;
+   m_hull = desc->hull;
+   m_geom = desc->geom;
+   m_comp = desc->comp;
+   if (desc->vert != nullptr) {
+       m_stage_flags |= gal_shader_stage::VERT;
+   }
+   if (desc->frag != nullptr) {
+       m_stage_flags |= gal_shader_stage::FRAG;
+   }
+   if (desc->comp != nullptr) {
+       m_stage_flags |= gal_shader_stage::COMP;
+   }
+   if (desc->domain != nullptr) {
+       m_stage_flags |= gal_shader_stage::DOMN;
+   }
+   if (desc->hull != nullptr) {
+       m_stage_flags |= gal_shader_stage::HULL;
+   }
+   if (desc->geom != nullptr) {
+       m_stage_flags |= gal_shader_stage::GEOM;
+   }
 
-    create_pipeline_reflection();
+   create_pipeline_reflection();
 }
 
 void compiled_shader_group::release() {
-    auto release = [](compiled_shader *shader) {
-        if (shader != nullptr) {
-            shader->release();
-        }
-    };
-    release(m_vert);
-    release(m_frag);
-    release(m_domain);
-    release(m_hull);
-    release(m_geom);
-    release(m_comp);
+   auto release = [](compiled_shader *shader) {
+       if (shader != nullptr) {
+           shader->release();
+       }
+   };
+   release(m_vert);
+   release(m_frag);
+   release(m_domain);
+   release(m_hull);
+   release(m_geom);
+   release(m_comp);
 }
 
 compiled_shader *compiled_shader_group::vert() { return m_vert != nullptr ? m_vert : nullptr; }

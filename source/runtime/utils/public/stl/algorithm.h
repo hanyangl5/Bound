@@ -1,8 +1,6 @@
-module;
 
+#pragma once
 #include <algorithm>
-
-export module algorithm;
 
 namespace bd {
 namespace stl {} // namespace stl

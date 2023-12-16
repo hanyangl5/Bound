@@ -13,7 +13,6 @@ target("platform")
     add_includedirs("public", {public = true})
     add_includedirs("private", {public = false})
     add_files(
-        "public/**.cppm",
         "private/**.cpp")
     add_deps("utils")
 

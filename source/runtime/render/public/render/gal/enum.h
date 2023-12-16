@@ -26,26 +26,22 @@
 
 #pragma once
 
-import blob;
-import types;
-import types;
-import array;
-import set;
-import string;
-import map;
+#include "format.h"
+
+#include "stl/containers.h"
+#include "utils/blob.h"
+#include "utils/types.h"
 
 #include <variant>
 #ifdef _WIN32
 #include <Windows.h>
 #endif
-#include "format.h"
-
-
 
 // namespace bd {
 // struct ante_window;
 // }
-namespace bd::gal {
+namespace bd {
+namespace gal {
 struct compiled_shader_group;
 
 inline constexpr uint32 MAX_RESOURCE_NAME_LENGTH = 256;
@@ -458,7 +454,7 @@ DECLARE_GAL_HANDLE(gal_context) {
 };
 
 struct gal_buffer_desc {
-    uint64 size;                             // size
+    uint64 size;                          // size
     gal_descriptor_type descriptor_types; // descriptor types of buffer
     gal_resource_state initial_state;     // initial state of buffer
     gal_memory_flag memory_flags;
@@ -577,16 +573,16 @@ DECLARE_GAL_HANDLE(gal_swap_chain) {
     bd::stl::array<gal_render_target, MAX_SWAPCHAIN_IMAGES> m_render_targets;
 };
 
-//struct gal_shader_desc {
+// struct gal_shader_desc {
 //    uint64 size;
 //    void *data;
-//};
+// };
 
-//DECLARE_GAL_HANDLE(gal_shader) {
+// DECLARE_GAL_HANDLE(gal_shader) {
 //    gal_shader_stage stage_flag : 31;
 //    uint32 mNumThreadsPerGroup[3];
 //    PipelineReflection *pReflection;
-//};
+// };
 
 struct gal_shader_program_desc {
     compiled_shader_group *shader_group;
@@ -901,4 +897,5 @@ struct gal_descriptor_set_update_desc {
     //void *data;
 };
 
-} // namespace bd::gal
+} // namespace gal
+} // namespace bd

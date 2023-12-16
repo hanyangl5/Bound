@@ -1,5 +1,3 @@
-add_requires("spirvcross_xmake")
-
 target("utils")
     set_kind("static")
     set_languages("cxx20")
@@ -7,8 +5,6 @@ target("utils")
     add_includedirs("private", {public = false})
     add_files(
         "private/**.cpp")
-    add_files(
-        "public/**.cppm")
     add_deps("mimalloc-xmake")
     add_deps("spdlog-xmake")
 
